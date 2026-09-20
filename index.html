@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-  onload="window.__katexReady=true;if(window.renderMathInElement)renderMathInElement(document.body,{delimiters:[{left:'\[',right:'\]',display:true},{left:'\(',right:'\)',display:false}],throwOnError:false});"></script>
+  onload="window.__katexReady=true; if(window.__bootMath) window.__bootMath();"></script>
 <style>
 :root{
   --bg:#f4f7fb; --card:#fff; --ink:#1a2332; --muted:#5a6a7e;
@@ -168,5 +168,21 @@ ul.plain li{margin:6px 0}
     馬Sir教室｜中五 M2 定積分學習報告｜公開託管於 GitHub Pages（非 NotebookLM）
   </footer>
 </div>
+
+<script>
+window.__bootMath=function(){
+  if(!window.renderMathInElement) return;
+  renderMathInElement(document.body,{
+    delimiters:[
+      {left:"\\[", right:"\\]", display:true},
+      {left:"\\(", right:"\\)", display:false}
+    ],
+    throwOnError:false
+  });
+};
+if(window.__katexReady) window.__bootMath();
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(window.__bootMath, 150); });
+</script>
+
 </body>
 </html>

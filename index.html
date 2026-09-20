@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>從黎曼和到定積分｜馬Sir教室 M2 學習報告</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="window.__katexReady=true;if(window.renderMathInElement)renderMathInElement(document.body,{delimiters:[{left:'\[',right:'\]',display:true},{left:'\(',right:'\)',display:false}],throwOnError:false});"></script>
+<style>
+:root{
+  --bg:#f4f7fb; --card:#fff; --ink:#1a2332; --muted:#5a6a7e;
+  --accent:#1e6b5a; --line:#d8e0ea; --shadow:0 8px 28px rgba(26,35,50,.08);
+  --blue:#2b6cb0; --amber:#c47a12;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+.wrap{max-width:880px;margin:0 auto;padding:20px 16px 56px}
+header.hero{
+  background:linear-gradient(135deg,#143d36,#1e6b5a 55%,#2b6cb0);color:#fff;
+  border-radius:18px;padding:24px 22px 20px;box-shadow:var(--shadow);margin-bottom:16px
+}
+header h1{margin:0 0 8px;font-size:1.45rem}
+header .sub{opacity:.92;font-size:.95rem}
+.badge{display:inline-block;margin-top:10px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:4px 10px;border-radius:999px;font-size:.8rem;margin-right:6px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.toc a{text-decoration:none;color:var(--accent);background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.86rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 18px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 12px;font-size:1.2rem;color:#143d36;display:flex;align-items:center;gap:10px}
+.card h2 .num{display:inline-flex;width:28px;height:28px;border-radius:8px;background:var(--accent);color:#fff;align-items:center;justify-content:center;font-size:.85rem}
+.card h3{margin:18px 0 8px;font-size:1.05rem;color:var(--blue)}
+.goals{margin:0;padding-left:1.2em}
+.goals li{margin:6px 0}
+.formula{overflow-x:auto;background:#f0f5fb;border-radius:12px;padding:12px 14px;margin:12px 0}
+.note{background:#fff6e8;border-left:4px solid var(--amber);padding:10px 12px;border-radius:0 10px 10px 0;margin:12px 0;font-size:.95rem}
+.fig{margin:14px 0;text-align:center}
+.fig img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--line)}
+.fig figcaption{font-size:.85rem;color:var(--muted);margin-top:8px}
+video{width:100%;max-height:70vh;border-radius:12px;background:#000;border:1px solid var(--line)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{display:inline-block;text-decoration:none;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;font-weight:600;font-size:.92rem}
+.btn.secondary{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+.pdf-frame{width:100%;height:70vh;border:1px solid var(--line);border-radius:12px;background:#fff}
+.muted{color:var(--muted);font-size:.9rem}
+footer{margin-top:8px;text-align:center;color:var(--muted);font-size:.85rem}
+ul.plain{padding-left:1.2em}
+ul.plain li{margin:6px 0}
+.katex{font-size:1.08em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>從黎曼和到定積分</h1>
+    <div class="sub">中五 M2 學習報告｜馬Sir教室</div>
+    <span class="badge">無需 VPN</span>
+    <span class="badge">可嵌入 Google Sites</span>
+    <span class="badge">公式需連網載入（KaTeX）</span>
+  </header>
+
+  <nav class="toc" aria-label="目錄">
+    <a href="#intro">① 導言</a>
+    <a href="#riemann">② 黎曼和</a>
+    <a href="#signed">③ 有號面積</a>
+    <a href="#ftc">④ FTC</a>
+    <a href="#advanced">⑤ 代換與對稱</a>
+    <a href="#summary">⑥ 總結</a>
+    <a href="#slides">講義 PDF</a>
+  </nav>
+
+  <section class="card" id="intro">
+    <h2><span class="num">1</span>導言</h2>
+    <p>如果要你計算一條不規則曲線下方的面積，你會怎麼做？在古代，人們必須把圖形切成成千上萬個細小的長方形來逼近真實面積。但只要找到一個「神奇函數」（原函數），竟然連一個長方形都不用畫，就能精準算出答案。這就是微積分中最偉大的橋梁——微積分基本定理。本課帶你一窺這個化繁為簡的世界。</p>
+    <h3>學習目標</h3>
+    <ul class="goals">
+      <li><strong>理解定積分的本質：</strong>說明定積分如何作為黎曼和在分割無限細分時的極限。</li>
+      <li><strong>掌握微積分基本定理（FTC）：</strong>運用原函數快速求定積分，並理解為何不必加上常數 \(C\)。</li>
+      <li><strong>辨析幾何面積與有號面積：</strong>區分兩者意義，並能處理被積函數小於零的情況。</li>
+      <li><strong>善用對稱性簡化計算：</strong>利用奇函數與偶函數，簡化對稱區間上的定積分。</li>
+    </ul>
+    <div class="actions">
+      <a class="btn secondary" href="https://masir-math.github.io/m2-definite-integral/" target="_blank" rel="noopener">打開互動 Web App（黎曼和探索）</a>
+    </div>
+  </section>
+
+  <section class="card" id="riemann">
+    <h2><span class="num">2</span>黎曼和：用長方形拼湊出曲線面積</h2>
+    <p>如何精確測量像 \(y = x^2\) 這樣的曲線，在區間 \([0, 1]\) 下方與 \(x\) 軸圍成的面積？</p>
+    <p>把區間等分成 \(n\) 個小區間，每個寬度 \(\Delta x = \dfrac{b-a}{n}\)。在每個小區間取樣點 \(x_i^*\)，以 \(f(x_i^*)\) 作長方形高度。把 \(n\) 個長方形面積加起來，就是黎曼和：</p>
+    <div class="formula">\[ S_n = \sum_{i=1}^{n} f(x_i^*) \Delta x \]</div>
+    <p>當 \(n \to \infty\)（此時 \(\Delta x \to 0\)），鋸齒會消失並貼合曲線。這個極限就是定積分的定義：</p>
+    <div class="formula">\[ \int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n} f(x_i^*)\Delta x \]</div>
+    <div class="note"><strong>想一想：</strong>無限細分時，全部用左端點或右端點，極限會不同嗎？答案是：只要函數在區間上連續，無論怎麼選樣點，都會收斂到同一個定積分值。</div>
+    <figure class="fig">
+      <img src="assets/riemann-infographic.png" alt="從黎曼和到定積分：極限逼近的視覺化旅程">
+      <figcaption>資訊圖：\(y=x^2\) 在 \([0,1]\) 由 \(n=4\) → \(n=10\) → \(n\to\infty\) 逼近 \(\frac{1}{3}\)</figcaption>
+    </figure>
+    <h3>短片：黎曼和與極限（約 1 分 20 秒）</h3>
+    <p class="muted">配音為普通話，畫面有繁中字幕；適合課堂引入或複習。</p>
+    <video controls playsinline preload="metadata" poster="assets/riemann-infographic.png">
+      <source src="media/riemann-to-integral.mp4" type="video/mp4">
+      你的瀏覽器不支援影片播放，請<a href="media/riemann-to-integral.mp4">下載短片</a>。
+    </video>
+  </section>
+
+  <section class="card" id="signed">
+    <h2><span class="num">3</span>有號面積：定積分不只是面積</h2>
+    <p>日常生活中「面積」永遠是正數。但定積分代表的是<strong>有號面積（Signed Area）</strong>。</p>
+    <p>曲線在 \(x\) 軸上方時 \(f(x)&gt;0\)，貢獻為正；在下方時 \(f(x)&lt;0\)，貢獻為負。因此：</p>
+    <div class="formula">\[ \text{定積分} = (x\text{ 軸上方的面積}) - (x\text{ 軸下方的面積}) \]</div>
+    <p>例如 \(\displaystyle\int_{-1}^{1} x\,dx\)：左右兩塊三角形大小相等、符號相反，結果為 \(0\)。若問「總幾何面積」，則要算 \(\displaystyle\int_{-1}^{1}|x|\,dx = 1\)。</p>
+  </section>
+
+  <section class="card" id="ftc">
+    <h2><span class="num">4</span>微積分基本定理（FTC）</h2>
+    <p>用極限定義硬算黎曼和很痛苦。FTC 指出：若 \(F'(x)=f(x)\)，則</p>
+    <div class="formula">\[ \int_a^b f(x)\,dx = \bigl[F(x)\bigr]_a^b = F(b)-F(a) \]</div>
+    <h3>為什麼定積分不需要寫 \(+C\)？</h3>
+    <p>不定積分要加常數 \(C\)。但定積分上下限相減時：</p>
+    <div class="formula">\[ \bigl(F(b)+C\bigr)-\bigl(F(a)+C\bigr)=F(b)-F(a) \]</div>
+    <p>常數 \(C\) 被抵消，所以計算定積分時一律不寫 \(+C\)。</p>
+    <h3>實戰範例</h3>
+    <p>求 \(\displaystyle\int_0^1 x^2\,dx\)。</p>
+    <p>原函數取 \(F(x)=\dfrac{x^3}{3}\)：</p>
+    <div class="formula">\[ \int_0^1 x^2\,dx = \left[\frac{x^3}{3}\right]_0^1 = \frac{1}{3}-0=\frac{1}{3} \]</div>
+    <p>這與黎曼和逼近得到的 \(0.333\ldots\) 吻合，但只需幾秒。</p>
+  </section>
+
+  <section class="card" id="advanced">
+    <h2><span class="num">5</span>進階技巧：代換法與對稱性</h2>
+    <h3>技巧一：定積分代換法</h3>
+    <p>用 \(u=g(x)\) 代換時，<strong>必須同時更換上下限</strong>。當 \(x=a\) 時 \(u=g(a)\)；當 \(x=b\) 時 \(u=g(b)\)：</p>
+    <div class="formula">\[ \int_a^b f\bigl(g(x)\bigr)g'(x)\,dx = \int_{g(a)}^{g(b)} f(u)\,du \]</div>
+    <p>換完上下限後，不必再代回 \(x\)，直接用新的 \(u\) 上下限求值。</p>
+    <h3>技巧二：對稱性（奇偶函數）</h3>
+    <p>若積分區間為 \([-a,a]\)：</p>
+    <ul class="plain">
+      <li><strong>奇函數</strong>（\(f(-x)=-f(x)\)，如 \(x^3,\sin x\)）：\(\displaystyle\int_{-a}^{a}f(x)\,dx=0\)</li>
+      <li><strong>偶函數</strong>（\(f(-x)=f(x)\)，如 \(x^2,\cos x\)）：\(\displaystyle\int_{-a}^{a}f(x)\,dx=2\int_0^a f(x)\,dx\)</li>
+    </ul>
+    <div class="note"><strong>小妙招：</strong>見到對稱區間（如 \([-\pi,\pi]\)），先檢查是否奇函數；是的話直接寫 \(0\)。</div>
+  </section>
+
+  <section class="card" id="summary">
+    <h2><span class="num">6</span>總結</h2>
+    <ul class="plain">
+      <li><strong>定義本質：</strong>定積分是黎曼和在 \(n\to\infty\)（\(\Delta x\to 0\)）時的極限。</li>
+      <li><strong>有號面積：</strong>\(x\) 軸下方區域會對積分做出負貢獻。</li>
+      <li><strong>FTC：</strong>若 \(F'=f\)，則 \(\int_a^b f=F(b)-F(a)\)；常數 \(C\) 會抵消。</li>
+      <li><strong>代換法：</strong>\(u\)-代換時上下限必須同步轉換。</li>
+      <li><strong>奇偶對稱：</strong>\([-a,a]\) 上奇函數積分為 \(0\)；偶函數可化為 \(2\int_0^a\)。</li>
+    </ul>
+  </section>
+
+  <section class="card" id="slides">
+    <h2>講義 PDF（完整投影片）</h2>
+    <p class="muted">可直接在下方預覽；若手機預覽不便，請下載後開啟。</p>
+    <div class="actions">
+      <a class="btn" href="media/lesson-slides.pdf" target="_blank" rel="noopener">下載／開啟 PDF</a>
+      <a class="btn secondary" href="media/riemann-to-integral.mp4" download>下載短片</a>
+    </div>
+    <p style="margin-top:14px"></p>
+    <iframe class="pdf-frame" title="定積分學習講義 PDF" src="media/lesson-slides.pdf"></iframe>
+  </section>
+
+  <footer>
+    馬Sir教室｜中五 M2 定積分學習報告｜公開託管於 GitHub Pages（非 NotebookLM）
+  </footer>
+</div>
+</body>
+</html>
